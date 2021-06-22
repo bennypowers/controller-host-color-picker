@@ -5,4 +5,15 @@
 </head>
 <body>
   <color-picker></color-picker>
+  <output></output>
+  <script>
+    document
+      .querySelector('color-picker')
+      .addEventListener('pick', event => {
+        document
+          .querySelector('output')
+          .style
+          .setProperty('background-color', event.target.color);
+      });
+  </script>
 </body>

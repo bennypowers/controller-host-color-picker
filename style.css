@@ -2,3 +2,10 @@ color-picker {
   width: 400px;
   height: 400px;
 }
+
+output {
+  display: block;
+  width: 400px;
+  height: 120px;
+  margin-top: 12px;
+}
