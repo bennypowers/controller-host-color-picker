@@ -1,5 +1,7 @@
 import { ControllerHostMixin } from 'https://unpkg.com/@apollo-elements/mixins@next/controller-host-mixin.js?module';
 
+import { MouseController } from './mouse-controller.js';
+
 const template = document.createElement('template');
       template.innerHTML = `
         <link rel="stylesheet" href="color-picker.css">
@@ -7,6 +9,8 @@ const template = document.createElement('template');
       `;
 
 class ColorPicker extends ControllerHostMixin(HTMLElement) {
+  mouse = new MouseController(this);
+
   constructor() {
     super()
     this
@@ -15,6 +19,7 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
   }
 
   update() {
+    console.log(this.mouse.pos);
     super.update();
   }
 }
