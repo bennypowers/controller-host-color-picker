@@ -16,6 +16,7 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
     this
       .attachShadow({ mode: 'open' })
       .append(template.content.cloneNode(true));
+    this.addEventListener('click', () => this.#pick());
   }
 
   update() {
@@ -28,7 +29,15 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
     this.style.setProperty('--y', `${y}px`);
     this.style.setProperty('--hue', hue);
     this.style.setProperty('--saturation', `${saturation}%`);
+    this.style.setProperty('--loupe-border-color', this.mouse.down ? 'white' : 'black');
+    if (this.mouse.down)
+      this.#pick();
     super.update();
+  }
+
+  #pick() {
+    this.color = getComputedStyle(this.loupe).getPropertyValue('background-color');
+    this.dispatchEvent(new CustomEvent('pick'));
   }
 }
 

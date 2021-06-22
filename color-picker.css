@@ -24,9 +24,10 @@
   display: block;
   height: 40px;
   width: 40px;
-  border: 3px solid black;
+  border: 3px solid var(--loupe-border-color, black);
   border-radius: 100%;
   background: hsl(var(--hue, 0) var(--saturation, 100%) 50%);
   transform: translate(var(--x, 0), var(--y, 0));
+  transition: border-color 0.1s ease-in-out;
   will-change: background, transform;
 }
