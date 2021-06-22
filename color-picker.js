@@ -19,7 +19,15 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
   }
 
   update() {
-    console.log(this.mouse.pos);
+    const x = this.mouse.pos.x - this.clientLeft;
+    const y = this.mouse.pos.y - this.clientTop;
+    if (x > this.clientWidth || y > this.clientHeight) return;
+    const hue = Math.floor((x / this.clientWidth) * 360);
+    const saturation = 100 - Math.floor((y / this.clientHeight) * 100);
+    this.style.setProperty('--x', `${x}px`);
+    this.style.setProperty('--y', `${y}px`);
+    this.style.setProperty('--hue', hue);
+    this.style.setProperty('--saturation', `${saturation}%`);
     super.update();
   }
 }
