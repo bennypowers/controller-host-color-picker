@@ -17,6 +17,7 @@ Let's build a colour picker web component using HTML, CSS, and a little bit of J
   - [Adding Controller Support to our Element](#adding-controller-support-to-our-element)
   - [Hooking up the Cursor](#hooking-up-the-cursor)
 1. [Firing Events](#firing-events)
+1. [Accessibility](#accessibility)
 1. [Using our Colour Picker](#using-our-colour-picker)
 1. [Next Steps](#next-steps)
 1. [Footnotes](#footnotes)
@@ -480,6 +481,51 @@ customElements.define('color-picker', ColorPicker);
 
 {% enddetails %}
 
+## Accessibility
+
+We should take our social responsibility as engineers seriously. I'm ashamed to admit that I treated accessibility as an afterthought when originally drafting this post, but hopefully this section can do something to make it better.
+
+Let's add screen reader accessibility to our element. We'll start by giving our `loupe` div a `button` role and an aria-label. We could use a `<button>` as well with visually hidden text content, but since we've already styled things the way we want, I think this is an acceptable use of `role="button"`.
+
+Let's also add a `<div role="alert">` which we'll use to announce our chosen colour.
+
+```html
+<link rel="stylesheet" href="color-picker.css">
+<div id="loupe" role="button" aria-label="color picker"></div>
+<div id="alert" role="alert" aria-hidden="true"></div>
+```
+
+Give the alert 'visually hidden' styles, since we'll be setting it's text content to announce our colour.
+
+```css
+#alert {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+```
+
+Last thing we need to do is set the alert's text when we pick the colour.
+
+```js
+constructor() {
+  // ...
+  this.alert = this.shadowRoot.getElementById('alert');
+}
+
+#pick() {
+  this.color = getComputedStyle(this.loupe).getPropertyValue('background-color');
+  this.alert.textContent = this.color;
+  this.alert.setAttribute("aria-hidden", "false");
+  this.dispatchEvent(new CustomEvent('pick'));
+}
+```
+
+And we're good, screen readers will now announce the chosen colour.
 
 ## Using our Colour Picker
 
@@ -524,7 +570,7 @@ Can you improve on the design? Here are some ideas to get your gears turning:
 - Display the picked colour in HEX, HSL, or RGB
 - Use the picker in a popover menu
 - Add a lightness slider
-- Implement support for screenreaders #a11y
+- Implement WCAG contrast checking
 - Use alternate colour spaces
 - Keep the loupe always within the colour picker area
 - Animate the cursor

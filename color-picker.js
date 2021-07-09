@@ -5,7 +5,8 @@ import { MouseController } from './mouse-controller.js';
 const template = document.createElement('template');
       template.innerHTML = `
         <link rel="stylesheet" href="color-picker.css">
-        <div id="loupe"></div>
+        <div id="loupe" role="button" aria-label="color picker"></div>
+        <div id="alert" role="alert" aria-hidden="true"></div>
       `;
 
 class ColorPicker extends ControllerHostMixin(HTMLElement) {
@@ -16,7 +17,9 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
     this
       .attachShadow({ mode: 'open' })
       .append(template.content.cloneNode(true));
-    this.addEventListener('click', () => this.#pick());
+    this.loupe = this.shadowRoot.getElementById('loupe');
+    this.alert = this.shadowRoot.getElementById('alert');
+    this.loupe.addEventListener('click', () => this.#pick());
   }
 
   update() {
@@ -37,6 +40,8 @@ class ColorPicker extends ControllerHostMixin(HTMLElement) {
 
   #pick() {
     this.color = getComputedStyle(this.loupe).getPropertyValue('background-color');
+    this.alert.textContent = this.color;
+    this.alert.setAttribute("aria-hidden", "false");
     this.dispatchEvent(new CustomEvent('pick'));
   }
 }
